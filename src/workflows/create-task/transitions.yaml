@@ -1,0 +1,93 @@
+# Transition rules for create-task state machine
+
+transitions:
+  # INIT transitions
+  - from: INIT
+    to: PRE_CHECK
+    condition: user_confirm
+
+  - from: INIT
+    to: ERROR
+    condition: user_cancel
+
+  # PRE_CHECK transitions
+  - from: PRE_CHECK
+    to: CONTEXT_REVIEW
+    condition: check_passed
+
+  - from: PRE_CHECK
+    to: ERROR
+    condition: missing_prerequisites
+
+  # CONTEXT_REVIEW transitions
+  - from: CONTEXT_REVIEW
+    to: PERIOD_DEFINITION
+    condition: context_confirmed
+
+  - from: CONTEXT_REVIEW
+    to: ERROR
+    condition: needs_update
+
+  # PERIOD_DEFINITION transitions
+  - from: PERIOD_DEFINITION
+    to: TASK_DECOMPOSITION
+    condition: period_defined
+
+  # TASK_DECOMPOSITION transitions
+  - from: TASK_DECOMPOSITION
+    to: PRIORITY_SETTING
+    condition: decomposition_complete
+
+  - from: TASK_DECOMPOSITION
+    to: REFINE
+    condition: needs_refine
+
+  # PRIORITY_SETTING transitions
+  - from: PRIORITY_SETTING
+    to: FEASIBILITY_CHECK
+    condition: priorities_set
+
+  - from: PRIORITY_SETTING
+    to: REFINE
+    condition: distribution_unreasonable
+
+  # FEASIBILITY_CHECK transitions
+  - from: FEASIBILITY_CHECK
+    to: FILE_CREATION
+    condition: feasible
+
+  - from: FEASIBILITY_CHECK
+    to: REFINE
+    condition: needs_adjustment
+
+  # REFINE transitions
+  - from: REFINE
+    to: TASK_DECOMPOSITION
+    condition: refinement_done
+
+  # FILE_CREATION transitions
+  - from: FILE_CREATION
+    to: TRACKING_SETUP
+    condition: file_created
+
+  - from: FILE_CREATION
+    to: REFINE
+    condition: file_conflict
+
+  - from: FILE_CREATION
+    to: ERROR
+    condition: file_error
+
+  # TRACKING_SETUP transitions
+  - from: TRACKING_SETUP
+    to: COMPLETE
+    condition: setup_complete
+
+  # Terminal states
+  - from: COMPLETE
+    to: END
+    condition: workflow_end
+
+  - from: ERROR
+    to: END
+    condition: workflow_end

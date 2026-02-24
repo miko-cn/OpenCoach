@@ -1,0 +1,89 @@
+# Transition rules for create-review state machine
+
+transitions:
+  # INIT transitions
+  - from: INIT
+    to: PRE_CHECK
+    condition: user_ready
+
+  - from: INIT
+    to: ERROR
+    condition: user_cancel
+
+  # PRE_CHECK transitions
+  - from: PRE_CHECK
+    to: TASK_REVIEW
+    condition: check_passed
+
+  - from: PRE_CHECK
+    to: ERROR
+    condition: no_tasks
+
+  - from: PRE_CHECK
+    to: TASK_UPDATE
+    condition: user_adjust
+
+  # TASK_REVIEW transitions
+  - from: TASK_REVIEW
+    to: CHALLENGE_DISCUSSION
+    condition: has_incomplete_tasks
+
+  - from: TASK_REVIEW
+    to: EXPERIENCE_SUMMARY
+    condition: all_complete
+
+  # CHALLENGE_DISCUSSION transitions
+  - from: CHALLENGE_DISCUSSION
+    to: EXPERIENCE_SUMMARY
+    condition: discussion_complete
+
+  # EXPERIENCE_SUMMARY transitions
+  - from: EXPERIENCE_SUMMARY
+    to: IMPROVEMENT_PLANNING
+    condition: summary_complete
+
+  # IMPROVEMENT_PLANNING transitions
+  - from: IMPROVEMENT_PLANNING
+    to: ARCHIVE_DECISION
+    condition: plan_complete
+
+  # ARCHIVE_DECISION transitions
+  - from: ARCHIVE_DECISION
+    to: FILE_CREATION
+    condition: archive
+
+  - from: ARCHIVE_DECISION
+    to: TASK_UPDATE
+    condition: continue
+
+  # FILE_CREATION transitions
+  - from: FILE_CREATION
+    to: TASK_UPDATE
+    condition: file_created
+
+  - from: FILE_CREATION
+    to: ERROR
+    condition: file_error
+
+  # TASK_UPDATE transitions
+  - from: TASK_UPDATE
+    to: NEXT_CYCLE_PLANNING
+    condition: tasks_archived
+
+  - from: TASK_UPDATE
+    to: COMPLETE
+    condition: tasks_updated
+
+  # NEXT_CYCLE_PLANNING transitions
+  - from: NEXT_CYCLE_PLANNING
+    to: COMPLETE
+    condition: user_choice_made
+
+  # Terminal states
+  - from: COMPLETE
+    to: END
+    condition: workflow_end
+
+  - from: ERROR
+    to: END
+    condition: workflow_end

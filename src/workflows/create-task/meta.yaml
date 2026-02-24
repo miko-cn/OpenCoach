@@ -1,0 +1,20 @@
+# create-task workflow metadata
+
+workflow_id: create-task
+workflow_version: 2.0.0
+workflow_type: task_planning
+estimated_duration: 20-40 minutes
+initial_state: INIT
+final_states:
+  - COMPLETE
+
+# Prerequisites
+prerequisites:
+  - goal.md
+  - milestones.md
+
+# Output files
+outputs:
+  - path: goals/{goal-slug}/tasks.md
+    required: true
+    template: templates/tasks.md

@@ -1,0 +1,114 @@
+# Transition rules for state machine
+# Format: from_state -> to_state : condition
+
+transitions:
+  # INIT transitions
+  - from: INIT
+    to: PRE_CHECK
+    condition: user_confirm
+    description: "User confirms ready to start"
+
+  - from: INIT
+    to: ERROR
+    condition: user_cancel
+    description: "User cancels workflow"
+
+  # PRE_CHECK transitions
+  - from: PRE_CHECK
+    to: GOAL_ELICITATION
+    condition: check_passed
+    description: "Directory exists, proceed to goal elicitation"
+
+  - from: PRE_CHECK
+    to: ERROR
+    condition: file_error
+    description: "Cannot access goals directory"
+
+  # GOAL_ELICITATION transitions
+  - from: GOAL_ELICITATION
+    to: IMPORTANCE_EXPLORATION
+    condition: goal_clarified
+    description: "User provides clear goal description"
+
+  - from: GOAL_ELICITATION
+    to: ERROR
+    condition: goal_vague_after_max_attempts
+    description: "Goal remains vague after 3 attempts"
+
+  # IMPORTANCE_EXPLORATION transitions
+  - from: IMPORTANCE_EXPLORATION
+    to: SMART_EVALUATION
+    condition: motivation_clear
+    description: "User expresses clear intrinsic motivation"
+
+  - from: IMPORTANCE_EXPLORATION
+    to: IMPORTANCE_EXPLORATION
+    condition: motivation_external_only
+    description: "Continue exploring intrinsic motivation"
+
+  - from: IMPORTANCE_EXPLORATION
+    to: GOAL_ELICITATION
+    condition: goal_not_important
+    description: "User realizes goal is not important to them"
+
+  # SMART_EVALUATION transitions
+  - from: SMART_EVALUATION
+    to: ACTION_PLANNING
+    condition: all_dimensions_pass
+    description: "All SMART dimensions satisfied"
+
+  - from: SMART_EVALUATION
+    to: CLARIFY
+    condition: needs_clarification
+    description: "Some SMART dimensions need clarification"
+
+  # CLARIFY transitions
+  - from: CLARIFY
+    to: SMART_EVALUATION
+    condition: clarification_done
+    description: "Clarification completed, re-evaluate"
+
+  # ACTION_PLANNING transitions
+  - from: ACTION_PLANNING
+    to: FILE_CREATION
+    condition: strategy_defined
+    description: "Action strategy is defined"
+
+  # FILE_CREATION transitions
+  - from: FILE_CREATION
+    to: MILESTONE_PLANNING
+    condition: file_created
+    description: "Goal files created successfully"
+
+  - from: FILE_CREATION
+    to: CLARIFY
+    condition: file_conflict
+    description: "File naming conflict, need resolution"
+
+  - from: FILE_CREATION
+    to: ERROR
+    condition: file_error
+    description: "File creation failed"
+
+  # MILESTONE_PLANNING transitions
+  - from: MILESTONE_PLANNING
+    to: PREFERENCES_COLLECTION
+    condition: milestones_defined
+    description: "Milestones defined or user skips"
+
+  # PREFERENCES_COLLECTION transitions
+  - from: PREFERENCES_COLLECTION
+    to: COMPLETE
+    condition: workflow_complete
+    description: "Preferences collected or skipped"
+
+  # ERROR state
+  - from: ERROR
+    to: END
+    condition: workflow_end
+    description: "Workflow terminated with error"
+
+  - from: COMPLETE
+    to: END
+    condition: workflow_end
+    description: "Workflow completed successfully"

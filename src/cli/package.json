@@ -1,0 +1,20 @@
+{
+  "name": "opencoach-cli",
+  "version": "1.0.0",
+  "description": "OpenCoach CLI - Goal management and workflow tool",
+  "main": "opencoach.js",
+  "bin": {
+    "opencoach": "./opencoach.js"
+  },
+  "scripts": {
+    "start": "node opencoach.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "keywords": ["goal", "management", "coach", "productivity"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

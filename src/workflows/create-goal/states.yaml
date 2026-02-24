@@ -1,0 +1,108 @@
+# Structured state definitions for Agent execution
+# Each state has: id, description, entry_action, exit_condition, next_state
+
+states:
+  - id: INIT
+    description: "Workflow initialization - welcome and confirmation"
+    entry_script: scripts/init.md
+    exit_condition:
+      - type: user_confirm
+        goto: PRE_CHECK
+      - type: user_cancel
+        goto: ERROR
+
+  - id: PRE_CHECK
+    description: "Pre-flight checks - verify goals directory and scan existing goals"
+    entry_script: scripts/pre_check.md
+    exit_condition:
+      - type: check_passed
+        goto: GOAL_ELICITATION
+      - type: file_error
+        goto: ERROR
+
+  - id: GOAL_ELICITATION
+    description: "Goal elicitation using Chain-of-Thought prompting"
+    entry_script: scripts/goal_elicitation.md
+    exit_condition:
+      - type: goal_clarified
+        goto: IMPORTANCE_EXPLORATION
+      - type: goal_vague
+        max_attempts: 3
+        goto: ERROR
+
+  - id: IMPORTANCE_EXPLORATION
+    description: "Explore goal importance and intrinsic motivation"
+    entry_script: scripts/importance_exploration.md
+    exit_condition:
+      - type: motivation_clear
+        goto: SMART_EVALUATION
+      - type: motivation_external_only
+        continue: true
+      - type: goal_not_important
+        goto: GOAL_ELICITATION
+
+  - id: SMART_EVALUATION
+    description: "Evaluate goal against SMART principles"
+    entry_script: scripts/smart_evaluation.md
+    exit_condition:
+      - type: all_dimensions_pass
+        goto: ACTION_PLANNING
+      - type: needs_clarification
+        goto: CLARIFY
+
+  - id: CLARIFY
+    description: "Clarify specific SMART dimension issues"
+    entry_script: scripts/clarify.md
+    exit_condition:
+      - type: clarification_done
+        goto: SMART_EVALUATION
+
+  - id: ACTION_PLANNING
+    description: "Plan action guidelines and obstacle应对策略"
+    entry_script: scripts/action_planning.md
+    exit_condition:
+      - type: strategy_defined
+        goto: FILE_CREATION
+
+  - id: FILE_CREATION
+    description: "Create goal folder and files"
+    entry_script: scripts/file_creation.md
+    exit_condition:
+      - type: file_created
+        goto: MILESTONE_PLANNING
+      - type: file_conflict
+        goto: CLARIFY
+      - type: file_error
+        goto: ERROR
+
+  - id: MILESTONE_PLANNING
+    description: "Define key milestones for the goal"
+    entry_script: scripts/milestone_planning.md
+    exit_condition:
+      - type: milestones_defined
+        goto: PREFERENCES_COLLECTION
+      - type: user_skip
+        goto: PREFERENCES_COLLECTION
+
+  - id: PREFERENCES_COLLECTION
+    description: "Collect user preferences for agent interaction"
+    entry_script: scripts/preferences_collection.md
+    exit_condition:
+      - type: preferences_collected
+        goto: COMPLETE
+      - type: user_skip
+        goto: COMPLETE
+
+  - id: COMPLETE
+    description: "Workflow completion and summary"
+    entry_script: scripts/complete.md
+    exit_condition:
+      - type: workflow_end
+        goto: END
+
+  - id: ERROR
+    description: "Error handling state"
+    entry_script: scripts/error.md
+    exit_condition:
+      - type: workflow_end
+        goto: END

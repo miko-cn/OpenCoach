@@ -1,0 +1,25 @@
+# create-review workflow metadata
+
+workflow_id: create-review
+workflow_version: 2.0.0
+workflow_type: task_review
+estimated_duration: 15-30 minutes
+initial_state: INIT
+final_states:
+  - COMPLETE
+
+# Prerequisites
+prerequisites:
+  - tasks.md
+
+# Output files
+outputs:
+  - path: goals/{goal-slug}/reviews/{date}.md
+    required: true
+    template: templates/review.md
+  - path: goals/{goal-slug}/archives/tasks-{date}.md
+    required: false
+    template: tasks.md
+  - path: goals/{goal-slug}/tasks.md
+    required: false
+    template: templates/tasks.md

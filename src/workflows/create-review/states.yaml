@@ -1,0 +1,100 @@
+# Structured state definitions for create-review
+
+states:
+  - id: INIT
+    description: "Workflow initialization - welcome and atmosphere setting"
+    entry_script: scripts/init.md
+    exit_condition:
+      - type: user_ready
+        goto: PRE_CHECK
+      - type: user_cancel
+        goto: ERROR
+
+  - id: PRE_CHECK
+    description: "Verify tasks.md exists and check review timing"
+    entry_script: scripts/pre_check.md
+    exit_condition:
+      - type: check_passed
+        goto: TASK_REVIEW
+      - type: no_tasks
+        goto: ERROR
+      - type: user_adjust
+        goto: TASK_UPDATE
+
+  - id: TASK_REVIEW
+    description: "Review each task's completion status"
+    entry_script: scripts/task_review.md
+    exit_condition:
+      - type: review_complete
+        goto: CHALLENGE_DISCUSSION
+      - type: all_complete
+        goto: EXPERIENCE_SUMMARY
+
+  - id: CHALLENGE_DISCUSSION
+    description: "Discuss challenges with blocked/incomplete tasks"
+    entry_script: scripts/challenge_discussion.md
+    exit_condition:
+      - type: discussion_complete
+        goto: EXPERIENCE_SUMMARY
+
+  - id: EXPERIENCE_SUMMARY
+    description: "Summarize lessons learned and growth"
+    entry_script: scripts/experience_summary.md
+    exit_condition:
+      - type: summary_complete
+        goto: IMPROVEMENT_PLANNING
+
+  - id: IMPROVEMENT_PLANNING
+    description: "Plan improvements for next cycle"
+    entry_script: scripts/improvement_planning.md
+    exit_condition:
+      - type: plan_complete
+        goto: ARCHIVE_DECISION
+
+  - id: ARCHIVE_DECISION
+    description: "Decide whether to archive tasks"
+    entry_script: scripts/archive_decision.md
+    exit_condition:
+      - type: archive
+        goto: FILE_CREATION
+      - type: continue
+        goto: TASK_UPDATE
+
+  - id: FILE_CREATION
+    description: "Create review file and archive"
+    entry_script: scripts/file_creation.md
+    exit_condition:
+      - type: file_created
+        goto: TASK_UPDATE
+      - type: file_error
+        goto: ERROR
+
+  - id: TASK_UPDATE
+    description: "Update task statuses"
+    entry_script: scripts/task_update.md
+    exit_condition:
+      - type: tasks_archived
+        goto: NEXT_CYCLE_PLANNING
+      - type: tasks_updated
+        goto: COMPLETE
+
+  - id: NEXT_CYCLE_PLANNING
+    description: "Plan for next cycle or rest"
+    entry_script: scripts/next_cycle_planning.md
+    exit_condition:
+      - type: user_choice_made
+        goto: COMPLETE
+
+  - id: COMPLETE
+    description: "Workflow completion"
+    entry_script: scripts/complete.md
+    exit_condition:
+      - type: workflow_end
+        goto: END
+
+  - id: ERROR
+    description: "Error handling"
+    entry_script: scripts/error.md
+    exit_condition:
+      - type: workflow_end
+        goto: END

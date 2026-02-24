@@ -1,0 +1,25 @@
+# create-goal workflow metadata
+
+workflow_id: create-goal
+workflow_version: 2.0.0
+workflow_type: goal_creation
+estimated_duration: 15-30 minutes
+initial_state: INIT
+final_states:
+  - COMPLETE
+
+# Prerequisites
+prerequisites:
+  - none
+
+# Output files
+outputs:
+  - path: goals/{goal-slug}/goal.md
+    required: true
+    template: templates/goal.md
+  - path: goals/{goal-slug}/milestones.md
+    required: true
+    template: templates/milestones.md
+  - path: goals/{goal-slug}/preferences.md
+    required: false
+    template: templates/preferences.md

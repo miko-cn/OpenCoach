@@ -1,0 +1,104 @@
+# Structured state definitions for Agent execution
+# Each state has: id, description, entry_action, exit_condition
+
+states:
+  - id: INIT
+    description: "Workflow initialization - welcome and confirmation"
+    entry_script: scripts/init.md
+    exit_condition:
+      - type: user_confirm
+        goto: PRE_CHECK
+      - type: user_cancel
+        goto: ERROR
+
+  - id: PRE_CHECK
+    description: "Pre-flight checks - verify prerequisites"
+    entry_script: scripts/pre_check.md
+    exit_condition:
+      - type: check_passed
+        goto: CONTEXT_REVIEW
+      - type: missing_prerequisites
+        goto: ERROR
+
+  - id: CONTEXT_REVIEW
+    description: "Review goal and milestones context"
+    entry_script: scripts/context_review.md
+    exit_condition:
+      - type: context_confirmed
+        goto: PERIOD_DEFINITION
+      - type: needs_update
+        goto: ERROR
+
+  - id: PERIOD_DEFINITION
+    description: "Define task planning period"
+    entry_script: scripts/period_definition.md
+    exit_condition:
+      - type: period_defined
+        goto: TASK_DECOMPOSITION
+
+  - id: TASK_DECOMPOSITION
+    description: "Break down milestones into specific tasks"
+    entry_script: scripts/task_decomposition.md
+    exit_condition:
+      - type: decomposition_complete
+        goto: PRIORITY_SETTING
+      - type: needs_refine
+        goto: REFINE
+
+  - id: PRIORITY_SETTING
+    description: "Set task priorities using Eisenhower matrix"
+    entry_script: scripts/priority_setting.md
+    exit_condition:
+      - type: priorities_set
+        goto: FEASIBILITY_CHECK
+      - type: distribution_unreasonable
+        goto: REFINE
+
+  - id: FEASIBILITY_CHECK
+    description: "Check overall task feasibility"
+    entry_script: scripts/feasibility_check.md
+    exit_condition:
+      - type: feasible
+        goto: FILE_CREATION
+      - type: needs_adjustment
+        goto: REFINE
+
+  - id: REFINE
+    description: "Refine tasks based on feedback"
+    entry_script: scripts/refine.md
+    exit_condition:
+      - type: refinement_done
+        goto: TASK_DECOMPOSITION
+        # or PRIORITY_SETTING or FEASIBILITY_CHECK depending on what needs fixing
+
+  - id: FILE_CREATION
+    description: "Create tasks.md file"
+    entry_script: scripts/file_creation.md
+    exit_condition:
+      - type: file_created
+        goto: TRACKING_SETUP
+      - type: file_conflict
+        goto: REFINE
+      - type: file_error
+        goto: ERROR
+
+  - id: TRACKING_SETUP
+    description: "Set up task tracking and review schedule"
+    entry_script: scripts/tracking_setup.md
+    exit_condition:
+      - type: setup_complete
+        goto: COMPLETE
+
+  - id: COMPLETE
+    description: "Workflow completion"
+    entry_script: scripts/complete.md
+    exit_condition:
+      - type: workflow_end
+        goto: END
+
+  - id: ERROR
+    description: "Error handling"
+    entry_script: scripts/error.md
+    exit_condition:
+      - type: workflow_end
+        goto: END
