@@ -136,6 +136,13 @@ END IF
 - 保留"其他/自定义输入"选项，让用户可以自由表达
 - 不要让选项显得强制性或评判性
 - 根据具体问题调整选项数量，一般 3-4 个最合适
+
+8. **CLI命令强制使用**：
+   工作流执行时必须使用OpenCoach CLI命令进行状态管理、数据存储和文件操作：
+   - **状态管理**：使用 `opencoach state set <workflow> <state>` 更新状态
+   - **数据存储**：使用 `opencoach data set --key <k> --value <v>` 存储中间数据
+   - **文件操作**：使用 `opencoach goals create` / `opencoach tasks create` 创建文件
+   - **禁止行为**：禁止直接使用Write/Edit工具创建工作流输出文件
 </behavior>
 
 <persona>

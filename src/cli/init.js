@@ -185,6 +185,30 @@ function generateSkillContent(meta, states) {
   lines.push('Check exit conditions in order. Move to the first matching next state.');
   lines.push('');
 
+  // CLI Commands Usage
+  lines.push('## CLI Commands Usage');
+  lines.push('');
+  lines.push('**IMPORTANT: You MUST use OpenCoach CLI commands for all state and data operations**');
+  lines.push('');
+  lines.push('### State Management');
+  lines.push('- Update state: `opencoach state set <workflow> <state>`');
+  lines.push('- Get state: `opencoach state get <workflow>`');
+  lines.push('- Clear state: `opencoach state clear <workflow>`');
+  lines.push('');
+  lines.push('### Data Storage');
+  lines.push('- Store data: `opencoach data set --key <k> --value <v>`');
+  lines.push('- Store JSON: `opencoach data set --json <json>`');
+  lines.push('- Get data: `opencoach data get [--key <k>]`');
+  lines.push('- Clear data: `opencoach data clear`');
+  lines.push('');
+  lines.push('### Goal/Task Operations');
+  lines.push('- Create goal: `opencoach goals create <name>`');
+  lines.push('- Create tasks: `opencoach tasks create <goal-slug>`');
+  lines.push('- List goals: `opencoach goals list`');
+  lines.push('');
+  lines.push('**Do NOT use Write/Edit tools directly for workflow outputs. Use CLI commands only.**');
+  lines.push('');
+
   // Outputs
   if (meta.outputs) {
     lines.push('## Output Files');
