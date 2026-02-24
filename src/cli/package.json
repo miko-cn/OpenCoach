@@ -6,15 +6,26 @@
   "bin": {
     "opencoach": "./opencoach.js"
   },
+  "files": [
+    "opencoach.js",
+    "init.js",
+    "workflows/**/*"
+  ],
   "scripts": {
     "start": "node opencoach.js",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "init": "node init.js --dev",
+    "prepack": "node build-pre.js",
+    "postpack": "node build-post.js"
   },
   "keywords": ["goal", "management", "coach", "productivity"],
   "author": "",
   "license": "MIT",
   "devDependencies": {
     "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
   }
 }

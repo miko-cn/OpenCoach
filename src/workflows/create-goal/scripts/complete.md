@@ -40,6 +40,35 @@ Summarize workflow completion and provide next steps.
    opencoach data clear
    ```
 
+## Interactive Options
+
+当询问"接下来想做什么？"时，生成以下下一步选项：
+
+**选项框架：**
+- 开始制定具体任务（使用 create-task 工作流）
+- 先休息一下，想清楚了再说
+- 再看看其他目标
+
+**提示词模板：**
+```
+为"接下来想做什么？"生成 3 个下一步选项：
+
+选项要求：
+- 提供制定任务、休息、查看其他目标三个选项
+- 简洁明了（每个不超过30字）
+- 让用户能快速选择接下来的行动
+
+示例：
+- 开始制定具体任务
+- 先休息一下，想清楚了再说
+- 再看看其他目标
+```
+
+**选项设计原则：**
+1. 提供制定任务的选项作为主要选项
+2. 提供休息选项，尊重用户节奏
+3. 提供查看其他目标的选项
+
 ## State Update Command
 
 Workflow ends. No further state update needed.

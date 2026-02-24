@@ -1,4 +1,21 @@
+# IDE
 .vscode
 .codebuddy
+
+# OpenCoach runtime data
 .opencoach
 goals/
+
+# Claude Code
+.claude/
+
+# CLI build artifacts
+src/cli/opencoach-cli-*.tgz
+
+# Generated skills (development)
+src/skills/
+
+# npm
+node_modules/
+package-lock.json
+*.log

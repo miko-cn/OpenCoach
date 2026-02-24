@@ -8,6 +8,9 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
+// Import init functions
+const { initProject, devInit, devInitAll } = require('./init');
+
 // Configuration
 const OPENCOACH_DIR = path.join(os.homedir(), 'OpenCoach');
 const GOALS_DIR = path.join(OPENCOACH_DIR, 'goals');
@@ -357,6 +360,13 @@ function parseArgs(args) {
   }
 
   // Handle top-level commands
+  if (cmd === 'init') {
+    const opts = parseOptions(remaining);
+    const cwd = opts.cwd || opts._[0];
+    initProject(cwd);
+    return;
+  }
+
   if (cmd === 'export') {
     const opts = parseOptions(remaining);
     exportGoal({ goal: opts._[0], output: opts.o });
@@ -411,6 +421,9 @@ function printHelp() {
 OpenCoach CLI - Goal management and workflow tool
 
 Usage:
+  opencoach init [--cwd <path>]   Initialize OpenCoach in current directory
+                                      Creates .claude/skills with workflow skills
+
   opencoach state get <workflow>     Get workflow state
   opencoach state set <workflow> <state>  Set workflow state
   opencoach state clear <workflow>   Clear workflow state

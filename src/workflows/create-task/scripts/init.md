@@ -27,6 +27,34 @@ Welcome user and confirm readiness for task planning.
 - **No goal**: redirect to create-goal → ERROR
 - **Cancel**: not ready → ERROR
 
+## Interactive Options
+
+当询问"准备好了吗？我们开始吧！"时，生成以下准备状态选项：
+
+**选项框架：**
+- 准备好了，开始吧！
+- 稍后再来（现在不太方便）
+- 还没目标，先去创建目标
+
+**提示词模板：**
+```
+为"准备好了吗？我们开始吧！"生成 3 个准备状态选项：
+
+选项要求：
+- 提供开始、稍后、创建目标三个选项
+- 简洁明了（每个不超过20字）
+
+示例：
+- 准备好了，开始吧！
+- 稍后再来
+- 还没目标，先去创建
+```
+
+**选项设计原则：**
+1. 提供明确的开始选项
+2. 提供稍后选项
+3. 提供创建目标的选项，因为这是前置条件
+
 ## State Update Command
 
 ```

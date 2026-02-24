@@ -27,6 +27,35 @@ Welcome the user and confirm they are ready to start the goal creation process.
 - **Need Info**: User asks questions → answer briefly, then reconfirm
 - **Cancel**: User says no/not ready → goto ERROR
 
+## Interactive Options
+
+当询问"准备好了吗？我们开始吧！"时，生成以下准备状态选项：
+
+**选项框架：**
+- 准备好了，开始吧！
+- 先了解一下流程（再详细说说）
+- 稍后再来（现在不太方便）
+
+**提示词模板：**
+```
+为"准备好了吗？我们开始吧！"生成 3 个准备状态选项：
+
+选项要求：
+- 提供明确的开始、了解更多、稍后再来三个选项
+- 简洁明了（每个不超过20字）
+- 让用户能快速选择当前状态
+
+示例：
+- 准备好了，开始吧！
+- 先了解一下流程
+- 稍后再来
+```
+
+**选项设计原则：**
+1. 提供明确的开始选项
+2. 提供了解更多流程的选项，满足信息需求
+3. 提供稍后再来的选项，尊重用户时间
+
 ## State Update Command
 
 ```
