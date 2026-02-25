@@ -48,6 +48,7 @@ function saveData(data) {
 }
 
 function generateSlug(name) {
+  if (!name) return '';
   return name.toLowerCase()
     .replace(/[^\w\s-]/g, '')
     .replace(/[-\s]+/g, '-')
@@ -56,41 +57,62 @@ function generateSlug(name) {
 
 // State commands
 function stateGet(args) {
+  const workflow = args._[0] || args.workflow;
   const state = loadState();
-  if (state[args.workflow]) {
-    console.log(`${args.workflow}: ${state[args.workflow]}`);
+  if (workflow && state[workflow]) {
+    console.log(`${workflow}: ${state[workflow]}`);
+  } else if (workflow) {
+    console.log(`No state found for workflow: ${workflow}`);
+    process.exit(1);
   } else {
-    console.log(`No state found for workflow: ${args.workflow}`);
+    console.log('Usage: opencoach state get <workflow>');
     process.exit(1);
   }
 }
 
 function stateSet(args) {
   ensureDirs();
+  const workflow = args._[0] || args.workflow;
+  const stateValue = args._[1] || args.state;
+  if (!workflow || !stateValue) {
+    console.log('Usage: opencoach state set <workflow> <state>');
+    process.exit(1);
+  }
   const state = loadState();
-  state[args.workflow] = args.state;
+  state[workflow] = stateValue;
   saveState(state);
-  console.log(`Set ${args.workflow} -> ${args.state}`);
+  console.log(`Set ${workflow} -> ${stateValue}`);
 }
 
 function stateClear(args) {
+  const workflow = args._[0] || args.workflow;
   const state = loadState();
-  if (state[args.workflow]) {
-    delete state[args.workflow];
+  if (workflow && state[workflow]) {
+    delete state[workflow];
     saveState(state);
-    console.log(`Cleared state for: ${args.workflow}`);
+    console.log(`Cleared state for: ${workflow}`);
+  } else if (workflow) {
+    console.log(`No state to clear for: ${workflow}`);
   } else {
-    console.log(`No state to clear for: ${args.workflow}`);
+    console.log('Usage: opencoach state clear <workflow>');
   }
 }
 
 // Data commands
 function dataSet(args) {
   const data = loadData();
-  if (args.key && args.value) {
-    data[args.key] = args.value;
+  if (args.key) {
+    data[args.key] = args.value || args._[0] || '';
   } else if (args.json) {
     Object.assign(data, JSON.parse(args.json));
+  } else if (args._[0] && args._[1]) {
+    // Support positional args: data set key value
+    data[args._[0]] = args._[1];
+  } else {
+    console.log('Usage: opencoach data set --key <key> --value <value>');
+    console.log('   or: opencoach data set <key> <value>');
+    console.log('   or: opencoach data set --json <json>');
+    process.exit(1);
   }
   saveData(data);
   console.log('Data stored');
@@ -98,11 +120,12 @@ function dataSet(args) {
 
 function dataGet(args) {
   const data = loadData();
-  if (args.key) {
-    if (data[args.key] !== undefined) {
-      console.log(JSON.stringify(data[args.key], null, 2));
+  const key = args.key || args._[0];
+  if (key) {
+    if (data[key] !== undefined) {
+      console.log(JSON.stringify(data[key], null, 2));
     } else {
-      console.log(`Key not found: ${args.key}`);
+      console.log(`Key not found: ${key}`);
       process.exit(1);
     }
   } else {
@@ -139,8 +162,16 @@ function goalsList() {
 }
 
 function goalsCreate(args) {
+  // Support both --name "value" and positional "value"
+  const name = args.name || args._[0];
+  if (!name) {
+    console.log('Usage: opencoach goals create <name>');
+    console.log('   or: opencoach goals create --name <name>');
+    process.exit(1);
+  }
+
   ensureDirs();
-  const slug = args.slug || generateSlug(args.name);
+  const slug = args.slug || generateSlug(name);
   const goalDir = path.join(GOALS_DIR, slug);
 
   if (fs.existsSync(goalDir) && !args.force) {
@@ -157,7 +188,7 @@ created: ${new Date().toISOString().split('T')[0]}
 status: active
 ---
 
-# ${args.name}
+# ${name}
 
 ## 目标描述
 
