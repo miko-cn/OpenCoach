@@ -22,6 +22,15 @@ Develop action guidelines and obstacle response strategies.
 - 结合用户情况推荐适合的方案
 - 不要给太多选择，1-2个重点推荐即可
 
+**资源保存流程**：
+当搜索到有用的资源时，执行以下流程：
+1. 向用户展示资源并询问："要我把这条资源保存到目标文件夹里吗？"
+2. 如果用户确认，使用CLI命令保存：
+   ```bash
+   opencoach goals add <goal-slug> "<资源标题>" "<URL>" "<简介>"
+   ```
+3. 如果用户不需要保存，直接继续
+
 ## Planning Framework
 
 ### 1. Obstacle Anticipation

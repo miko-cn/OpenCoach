@@ -229,6 +229,50 @@ function goalsGet(args) {
   console.log(`Files: ${files.join(', ')}`);
 }
 
+function goalsAddResource(args) {
+  const goal = args._[0] || args.goal;
+  const title = args._[1] || args.title;
+  const url = args._[2] || args.url;
+  const description = args.desc || args._[3] || '';
+
+  if (!goal || !title || !url) {
+    console.log('Usage: opencoach goals add <goal> <title> <url> [description]');
+    console.log('   or: opencoach goals add --goal <goal> --title <title> --url <url> [--desc <description>]');
+    process.exit(1);
+  }
+
+  const goalDir = path.join(GOALS_DIR, goal);
+  if (!fs.existsSync(goalDir)) {
+    console.log(`Goal not found: ${goal}`);
+    process.exit(1);
+  }
+
+  const resourceFile = path.join(goalDir, 'resources.md');
+  const timestamp = new Date().toISOString().split('T')[0];
+  const newEntry = `\n### ${title}\n- **简介**: ${description}\n- **链接**: ${url}\n- **保存时间**: ${timestamp}\n`;
+
+  let content = '';
+  if (fs.existsSync(resourceFile)) {
+    content = fs.readFileSync(resourceFile, 'utf-8');
+    // Check if already exists
+    if (content.includes(url)) {
+      console.log('Resource already exists');
+      return;
+    }
+    // Append to existing resources
+    if (content.includes('## 网络资源')) {
+      content = content.replace(/\n## 网络资源\n/, '\n## 网络资源' + newEntry);
+    } else {
+      content = content + '\n## 网络资源\n' + newEntry;
+    }
+  } else {
+    content = `# 资源收集\n\n## 网络资源\n${newEntry}`;
+  }
+
+  fs.writeFileSync(resourceFile, content, 'utf-8');
+  console.log(`Added resource to goal: ${goal}`);
+}
+
 // Tasks commands
 function tasksList(args) {
   const goalDir = path.join(GOALS_DIR, args.goal);
@@ -369,7 +413,8 @@ function parseArgs(args) {
     goals: {
       list: () => goalsList(),
       create: (a) => goalsCreate(a),
-      get: (a) => goalsGet(a)
+      get: (a) => goalsGet(a),
+      add: (a) => goalsAddResource(a)
     },
     tasks: {
       list: (a) => tasksList(a),
