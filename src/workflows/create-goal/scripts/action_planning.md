@@ -4,6 +4,24 @@
 
 Develop action guidelines and obstacle response strategies.
 
+## Web Search Guidance
+
+**触发条件**：当用户目标涉及以下情况时，可以使用WebSearch：
+
+- 用户需要具体的资源/工具/课程推荐
+- 用户不确定如何开始或学习方法
+- 目标涉及特定领域，需要推荐参考材料
+
+**搜索建议**：
+- "如何学习XX" → 搜索 "XX学习资源推荐" 或 "XX入门教程"
+- "有什么工具可以帮XX" → 搜索 "XX工具推荐" 或 "XX软件比较"
+- "怎么开始做XX" → 搜索 "XX入门指南" 或 "XX第一步"
+
+**搜索后动作**：
+- 向用户分享有用的资源链接或建议
+- 结合用户情况推荐适合的方案
+- 不要给太多选择，1-2个重点推荐即可
+
 ## Planning Framework
 
 ### 1. Obstacle Anticipation
