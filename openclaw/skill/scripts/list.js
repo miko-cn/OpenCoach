@@ -18,8 +18,8 @@ module.exports = async function({ context, params }) {
   // 解析输出
   const lines = result.output.split('\n');
   
-  // 检查是否有目标
-  if (lines.some(line => line.includes('No goals found'))) {
+  // 检查是否有目标或目录是否存在
+  if (lines.some(line => line.includes('No goals found') || line.includes('No goals directory'))) {
     return {
       content: `📋 暂无目标
 
