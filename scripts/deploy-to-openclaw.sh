@@ -7,6 +7,8 @@ echo "📦 部署 ClawCoach 到 OpenClaw..."
 
 OPENCLAW_SKILL="$HOME/.openclaw/workspace/skills/opencoach-src"
 OPENCLAW_AGENT="$HOME/.openclaw/workspace/agents/coach"
+OPENCLAW_SKILL_LINK="opencoach"
+OPENCLAW_AGENT_LINK="coach"
 
 # 检查是否已存在
 if [ -d "$OPENCLAW_SKILL" ]; then
@@ -50,8 +52,8 @@ git clone -b feature/openclaw-skill git@github.com:miko-cn/OpenCoach.git opencoa
 
 # 创建 symlink
 echo "🔗 创建 symlink..."
-ln -s opencoach-src/openclaw/skill opencoach
-ln -s opencoach-src/openclaw/agent-config ../../agents/coach
+ln -s opencoach-src/openClaw/skill $OPENCLAW_SKILL_LINK
+ln -s opencoach-src/openClaw/agentConfig ../../agents/$OPENCLAW_AGENT_LINK
 
 # 验证
 echo ""

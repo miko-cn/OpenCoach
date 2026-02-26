@@ -19,3 +19,4 @@ src/skills/
 node_modules/
 package-lock.json
 *.log
+DEPLOY_STATUS.md
