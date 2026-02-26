@@ -11,6 +11,8 @@ goals/
 
 # CLI build artifacts
 src/cli/opencoach-cli-*.tgz
+src/cli/node_modules/
+src/cli/package-lock.json
 
 # Generated skills (development)
 src/skills/
