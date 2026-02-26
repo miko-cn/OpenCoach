@@ -5,11 +5,11 @@
 ## 目录结构
 
 ```
-openClaw/
+openclaw/
 ├── skill/              # OpenClaw Skill
 │   ├── SKILL.md       # Skill 定义
 │   └── scripts/       # 脚本文件
-└── agentConfig/       # Coach Agent 配置
+└── agent-config/      # Coach Agent 配置
     ├── SOUL.md        # 人格设定
     ├── AGENTS.md      # 使用指南
     └── IDENTITY.md    # 身份定义
@@ -22,8 +22,8 @@ openClaw/
 ```bash
 cd ~/.openclaw/workspace/skills
 git clone -b feature/openclaw-skill git@github.com:miko-cn/OpenCoach.git opencoach-src
-ln -s opencoach-src/openClaw/skill opencoach
-ln -s opencoach-src/openClaw/agentConfig ../../agents/coach
+ln -s opencoach-src/openclaw/skill opencoach
+ln -s opencoach-src/openclaw/agent-config ../../agents/coach
 ```
 
 ### 方式 2：Git Worktree
